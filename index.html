@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Mini App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f0f8ff;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 My Telegram Mini App</h1>
+        <p id="output">Нажмите кнопку 👇</p>
+        <button onclick="showAlert()">Показать alert</button>
+        <button onclick="sendToTelegram()">Отправить в Telegram</button>
+        <button onclick="closeApp()">Закрыть приложение</button>
+    </div>
+
+    <script>
+        // Инициализация Telegram WebApp
+        const tg = window.Telegram.WebApp;
+        
+        // Расширяем приложение на весь экран
+        tg.expand();
+        
+        function showAlert() {
+            document.getElementById('output').innerText = '✅ Кнопка нажата! ' + new Date().toLocaleTimeString();
+        }
+        
+        function sendToTelegram() {
+            // Отправляем данные в Telegram бота
+            tg.sendData(JSON.stringify({
+                action: "button_pressed",
+                time: new Date().toISOString()
+            }));
+            
+            // Можно закрыть приложение после отправки
+            // tg.close();
+        }
+        
+        function closeApp() {
+            tg.close();
+        }
+        
+        // Получение данных от бота (если нужно)
+        tg.onEvent('themeChanged', () => {
+            document.body.style.backgroundColor = tg.themeParams.bg_color || '#f0f8ff';
+        });
+    </script>
+</body>
+</html>
